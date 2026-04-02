@@ -38,12 +38,21 @@
 {{> advancedSearchModal}}
 
 <script src="{{asset '/js/sessionList.js'}}"></script>
+<script id="sessionListConfig" type="application/json">
+{
+  "sortField": {{json sortField}},
+  "sortOrder": {{json sortOrder}},
+  "sessionType": "rdp"
+}
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  var configEl = document.getElementById('sessionListConfig');
+  var config = JSON.parse(configEl.textContent);
   initSessionList({
-    sortField: '{{sortField}}' || 'timestamp',
-    sortOrder: '{{sortOrder}}' || 'desc',
-    sessionType: 'rdp'
+    sortField: config.sortField || 'timestamp',
+    sortOrder: config.sortOrder || 'desc',
+    sessionType: config.sessionType
   });
 });
 </script>

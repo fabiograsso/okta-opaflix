@@ -99,8 +99,14 @@ async function listSessions(req, res, next) {
     const { tenantContext } = req;
     const { page, pageSize } = validatePaginationParams(req.query.page, req.query.pageSize);
     const searchQuery = req.query.q || '';
-    const sortField = req.query.sort || 'timestamp';
-    const sortOrder = req.query.order || 'desc';
+
+    // Validate sortField against allowed values to prevent injection
+    const allowedSortFields = ['timestamp', 'type', 'serverName', 'username', 'projectName', 'size'];
+    const sortField = allowedSortFields.includes(req.query.sort) ? req.query.sort : 'timestamp';
+
+    // Validate sortOrder against allowed values
+    const sortOrder = ['asc', 'desc'].includes(req.query.order) ? req.query.order : 'desc';
+
     const advancedFilters = extractAdvancedFilters(req.query);
     const typeFilter = advancedFilters.type;
 

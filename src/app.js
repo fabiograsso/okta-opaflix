@@ -60,8 +60,8 @@ function createApp(config, logger) {
         return String(str).substring(start, end).toUpperCase();
       },
       year: () => new Date().getFullYear(),
-      // JSON stringify for safe embedding in JavaScript (use with triple braces)
-      json: (value) => JSON.stringify(value),
+      // JSON stringify for safe embedding in script tags (handles undefined as null)
+      json: (value) => JSON.stringify(value === undefined ? null : value),
     },
   }));
   app.set('view engine', 'hbs');

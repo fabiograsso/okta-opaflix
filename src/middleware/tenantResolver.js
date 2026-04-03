@@ -328,7 +328,7 @@ function resolveTenant(config) {
 
       if (!tenantUrl || !teamName) {
         // No tenant/team selected - show team selection page
-        logger.warn('No tenant/team specified in request', {
+        logger.info('No tenant/team specified in request', {
           path: req.path,
           ip: req.ip,
           userId: req.user?.email,

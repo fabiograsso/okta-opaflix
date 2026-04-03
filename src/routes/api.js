@@ -19,8 +19,8 @@ function createApiRoutes() {
   // All API routes require authentication
   router.use(ensureAuthenticated);
 
-  // OPA API endpoints
-  router.get('/opa/filter-options', listRateLimiter, getFilterOptions);
+  // Filter options (from session data)
+  router.get('/filter-options', listRateLimiter, getFilterOptions);
 
   // Cache refresh endpoints
   router.get('/refresh/status', listRateLimiter, getRefreshStatus);

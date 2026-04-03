@@ -4,9 +4,9 @@
  * Handles API endpoints for fetching data from external services.
  */
 
-const { getAllFilterOptions, isEnabled, clearCache: clearOpaApiCache } = require('../services/opaApiService');
+const { clearCache: clearOpaApiCache } = require('../services/opaApiService');
 const { clearGraphCache } = require('../services/opaGraphService');
-const { rebuildIndex, getRefreshStatus, isStale } = require('../services/sessionIndexService');
+const { rebuildIndex, getRefreshStatus, isStale, getFilterOptions: getSessionFilterOptions } = require('../services/sessionIndexService');
 const { getLogger } = require('../config/logger');
 
 /**
@@ -37,35 +37,29 @@ function formatTimeAgo(date) {
 
 /**
  * Get filter options for dropdown population
- * @route GET /api/opa/filter-options
+ * Uses session data (not OPA API) for filter options
+ * @route GET /api/filter-options
  */
 async function getFilterOptions(req, res, next) {
   const logger = getLogger();
 
   try {
     const { tenantContext } = req;
+    const tenantId = tenantContext.tenantId;
 
-    if (!isEnabled(tenantContext.config)) {
-      return res.status(200).json({
-        enabled: false,
-        message: 'OPA API not configured',
-        servers: [],
-        users: [],
-        projects: [],
-        gateways: [],
-      });
-    }
+    // Get filter options from session index (in-memory)
+    const options = getSessionFilterOptions(tenantId);
 
-    const options = await getAllFilterOptions(tenantContext.config);
-
-    logger.debug('Filter options fetched', {
+    logger.debug('Filter options fetched from sessions', {
       servers: options.servers?.length || 0,
       users: options.users?.length || 0,
       projects: options.projects?.length || 0,
-      gateways: options.gateways?.length || 0,
     });
 
-    res.status(200).json(options);
+    res.status(200).json({
+      enabled: true,
+      ...options,
+    });
   } catch (error) {
     logger.error('Failed to fetch filter options', {
       error: error.message,
@@ -79,7 +73,6 @@ async function getFilterOptions(req, res, next) {
       servers: [],
       users: [],
       projects: [],
-      gateways: [],
     });
   }
 }

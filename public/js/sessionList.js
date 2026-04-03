@@ -758,8 +758,8 @@ function loadFilterOptions() {
   var now = Date.now();
 
   // Check session storage cache first
-  var cached = sessionStorage.getItem('opaFilterOptions');
-  var cachedTimestamp = parseInt(sessionStorage.getItem('opaFilterOptionsTimestamp') || '0', 10);
+  var cached = sessionStorage.getItem('filterOptions');
+  var cachedTimestamp = parseInt(sessionStorage.getItem('filterOptionsTimestamp') || '0', 10);
 
   if (cached && cachedTimestamp && (now - cachedTimestamp) < FILTER_OPTIONS_CACHE_TTL) {
     try {
@@ -774,8 +774,8 @@ function loadFilterOptions() {
   // Mark as loading
   filterOptionsData = { loading: true };
 
-  // Fetch from API
-  fetch('/api/opa/filter-options', {
+  // Fetch filter options from session data
+  fetch('/api/filter-options', {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
@@ -790,8 +790,8 @@ function loadFilterOptions() {
     })
     .then(function(options) {
       // Cache in session storage
-      sessionStorage.setItem('opaFilterOptions', JSON.stringify(options));
-      sessionStorage.setItem('opaFilterOptionsTimestamp', String(Date.now()));
+      sessionStorage.setItem('filterOptions', JSON.stringify(options));
+      sessionStorage.setItem('filterOptionsTimestamp', String(Date.now()));
       filterOptionsData = options;
       // Refresh any active autocomplete dropdown
       refreshActiveAutocomplete();
@@ -1022,7 +1022,7 @@ function escapeHtml(text) {
  * Clear filter options cache
  */
 function clearFilterOptionsCache() {
-  sessionStorage.removeItem('opaFilterOptions');
-  sessionStorage.removeItem('opaFilterOptionsTimestamp');
+  sessionStorage.removeItem('filterOptions');
+  sessionStorage.removeItem('filterOptionsTimestamp');
   filterOptionsData = null;
 }

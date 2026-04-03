@@ -514,6 +514,37 @@ function isReady(tenantId) {
 }
 
 /**
+ * Get unique filter options from session data
+ * Extracts servers, usernames, and projects from indexed sessions
+ * @param {string} tenantId - Tenant ID
+ * @returns {Object} Filter options with servers, users, projects arrays
+ */
+function getFilterOptions(tenantId) {
+  const state = tenantIndices.get(tenantId);
+  if (!state) {
+    return {
+      servers: [],
+      users: [],
+      projects: [],
+    };
+  }
+
+  // Combine all sessions (ssh + rdp)
+  const allSessions = [...state.ssh, ...state.rdp];
+
+  // Extract unique values, filter out nulls/empty, and sort
+  const servers = [...new Set(allSessions.map(s => s.serverName).filter(Boolean))].sort();
+  const users = [...new Set(allSessions.map(s => s.username).filter(Boolean))].sort();
+  const projects = [...new Set(allSessions.map(s => s.projectName).filter(Boolean))].sort();
+
+  return {
+    servers,
+    users,
+    projects,
+  };
+}
+
+/**
  * Shutdown - save indices to database (only in multi-tenant mode)
  */
 async function shutdown() {
@@ -539,6 +570,7 @@ module.exports = {
   getPagedResults,
   getStats,
   getRefreshStatus,
+  getFilterOptions,
   isStale,
   isReady,
   shutdown,

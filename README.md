@@ -52,7 +52,7 @@ One of the most common requests we receive from OPA customers is for a simple wa
 
 It's highly inspired by an old project of our former colleaugue [Daniel Harris](https://github.com/mrdanielmh/): [opa-utils](https://github.com/mrdanielmh/opa-utils). Since the project is not maintained anymore, I decided to create a new one with a more modern tech stack, and - to be transparent - the heavy help of the AI (Vibe coding with Claude Code).
 
-Opaflix is built with *Node.js*, *Express*, and *Handlebars* for the backend, and uses *[Asciinema Player](https://asciinema.org/)* for SSH session playback and HTML5 video for RDP sessions. It also integrates with the *[OPA API](https://developer.okta.com/docs/api/openapi/opa)* to provide real-time data for filter dropdowns and infrastructure graph.
+Opaflix is built with *Node.js*, *Express*, and *Handlebars* for the backend, and uses *[Asciinema Player](https://asciinema.org/)* for SSH session playback and HTML5 video for RDP sessions. It also integrates with the *[OPA API](https://developer.okta.com/docs/api/openapi/opa)* to provide real-time data for the infrastructure graph.
 
 > [!CAUTION]
 > **Not an Official Okta Product** - Opaflix is an open-source project developed by the community. It is not officially supported by Okta. Use at your own risk and always test in a non-production environment first.
@@ -310,7 +310,7 @@ Before deploying to Vercel, you need:
 
 1. **AWS Infrastructure** — S3 bucket with Access Key credentials (or you need to change the env variables for IAM Roles Anywhere)
 2. **Okta OIDC App** — Web application for authentication
-3. **OPA API Credentials** (optional) — For real data in filter dropdowns and graph
+3. **OPA API Credentials** (optional) — For infrastructure graph visualization
 
 #### Why Vercel?
 
@@ -338,7 +338,7 @@ The included `vercel.json` configures:
 | **Node.js 24+** | Yes | JavaScript runtime |
 | **Okta OIDC App** | Yes | Authentication via Okta SSO |
 | **AWS S3 Bucket** | Yes | Storage for converted session recordings |
-| **OPA API Credentials** | No | Optional — populates filter dropdowns with real data |
+| **OPA API Credentials** | No | Optional — for infrastructure graph visualization |
 
 ### Additional for Multi-Tenant Mode
 
@@ -395,7 +395,7 @@ AWS_SECRET_ACCESS_KEY=your-secret-key
 # AWS_ROLES_ANYWHERE_CERTIFICATE="-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
 # AWS_ROLES_ANYWHERE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
 
-# Optional: OPA API (for filter dropdowns and graph)
+# Optional: OPA API (for infrastructure graph)
 OPA_TENANT_URL=your-org.pam.okta.com      # Full OPA tenant URL
 OPA_TEAM_NAME=your-team                   # Team name within the OPA tenant
 OPA_API_KEY_ID=your-key-id
@@ -606,7 +606,7 @@ INSERT INTO tenants (tenant_url, team_name, description) VALUES
 | **OPA Configuration** | | | | |
 | `OPA_TENANT_URL` | Optional | — | — | OPA instance URL (e.g., `demo-blue-sky-1234.pam.okta.com`) |
 | `OPA_TEAM_NAME` | Optional | — | — | Team name within the OPA instance |
-| `OPA_API_KEY_ID` | Optional | — | — | OPA API key ID (for graph/filters) |
+| `OPA_API_KEY_ID` | Optional | — | — | OPA API key ID (for graph) |
 | `OPA_API_KEY_SECRET` | Optional | — | — | OPA API key secret |
 | **Database (Multi-Tenant Only)** | | | | |
 | `PGHOST` | — | Required | — | PostgreSQL hostname |
@@ -752,7 +752,7 @@ aws s3 sync /var/log/sft/converted/rdp/ s3://your-bucket/ --include "*.mkv"
 | `GET` | `/config` | Yes | Configuration page |
 | `POST` | `/config` | Yes | Update configuration (multi-tenant only) |
 | `GET` | `/graph` | Yes | Infrastructure graph |
-| `GET` | `/api/opa/filter-options` | Yes | OPA dropdown data |
+| `GET` | `/api/filter-options` | Yes | Filter dropdown data (from sessions) |
 | `GET` | `/api/refresh/status` | Yes | Session refresh status |
 | `GET` | `/login` | No | Okta login |
 | `GET` | `/logout` | Yes | Clear session |

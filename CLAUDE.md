@@ -189,7 +189,7 @@ opaflix/
 │   │   ├── s3Service.js          # AWS S3 interactions (multi-tenant, presigned URLs)
 │   │   ├── fileParser.js         # Session file parsing
 │   │   ├── oktaService.js        # Okta OIDC utilities
-│   │   ├── opaApiService.js      # OPA API integration for filter dropdowns (multi-tenant)
+│   │   ├── opaApiService.js      # OPA API integration for infrastructure graph
 │   │   ├── opaGraphService.js    # OPA infrastructure graph data service
 │   │   ├── sessionIndexService.js # Per-tenant session index for search/pagination
 │   │   ├── databaseService.js    # PostgreSQL connection pool and schema management
@@ -378,61 +378,47 @@ When working with AWS credentials:
 - Prefer IAM Roles Anywhere for production external deployments
 - Monitor certificate expiration dates shown in the config UI
 
+### Advanced Search Filter Options
+
+Filter dropdowns in the Advanced Search modal are populated from **session data** (not OPA API). This means only servers, users, and projects that have actual session recordings will appear in the dropdowns.
+
+**How It Works:**
+1. When the advanced search modal opens, the client fetches `/api/filter-options`
+2. Server extracts unique values from the session index (already in memory)
+3. Returns sorted lists of servers, users, and projects
+4. Dropdowns are populated with this data, cached client-side in sessionStorage (5 min)
+
+**Files Involved:**
+- `src/services/sessionIndexService.js` - `getFilterOptions()` extracts unique values
+- `src/controllers/apiController.js` - API endpoint handler
+- `src/routes/api.js` - API route definitions
+- `public/js/sessionList.js` - Client-side dropdown population
+
 ### OPA API Integration (Optional)
 
-Opaflix can integrate with the Okta Privileged Access (OPA) API to populate filter dropdowns with real data. This feature is **optional** - if not configured, dropdowns will remain as empty select boxes.
+Opaflix can integrate with the Okta Privileged Access (OPA) API for the **Infrastructure Graph** feature. This is **optional** - if not configured, the graph will not display data.
+
+> **Note**: OPA API is used **only for the Infrastructure Graph**, not for filter dropdowns.
 
 **Single-Tenant Mode**:
 - Credentials from `OPA_TENANT_URL`, `OPA_TEAM_NAME`, `OPA_API_KEY_ID`, `OPA_API_KEY_SECRET` environment variables
-- Preview status is derived from the tenant URL (contains `oktapreview.com`)
 
 **Multi-Tenant Mode**:
 - Credentials stored per-tenant in the `tenant_configs` database table
 - Configure via the `/config` page (OPA API section)
 
-**Authentication Flow:**
-1. The service reads OPA API credentials from the tenant's database configuration
-2. POST to `/v1/teams/{team_name}/service_token` with `key_id` and `key_secret`
-3. The returned `bearer_token` is used for subsequent API calls
-4. Token is cached until expiry, then automatically refreshed
-5. If a 401 `authentication_error` occurs, token is refreshed and request retried
+**Required Service User Permissions** (for Infrastructure Graph):
 
-**Required Service User Permissions:**
-
-The Service User should be added to a group with administrative permissions (e.g., "PAM Administrators") or have these specific capabilities:
-
-| Capability | Dropdown |
-| ---------- | ------- |
-| `team_users.list` | Users |
-| `groups.list` | Teams |
-| `team.servers.list` | Servers |
-| `resource_groups.list` | Projects (prerequisite) |
-| `projects.list` | Projects |
-| `gateways.list` | Gateways |
-
-> **Note**: Missing capabilities result in empty dropdowns for those fields, but the app continues to work gracefully.
-
-**How It Works:**
-1. When the advanced search modal opens, the client fetches `/api/opa/filter-options`
-2. Server obtains a Bearer token using the Service User API credentials
-3. The API returns lists of servers, users, projects, teams, and gateways from OPA
-4. Dropdowns are populated with this data, with the current filter value pre-selected
-5. Data is cached server-side (5 min) and client-side in sessionStorage (5 min)
-
-**OPA API Endpoints Used:**
-- `POST /v1/teams/:team_name/service_token` - Get Bearer token
-- `GET /v1/teams/:team_name/all_servers` - List all servers
-- `GET /v1/teams/:team_name/users?status=ACTIVE` - List active users
-- `GET /v1/teams/:team_name/groups` - List groups (for team filter)
-- `GET /v1/teams/:team_name/resource_groups` - List resource groups
-- `GET /v1/teams/:team_name/resource_groups/:id/projects` - List projects
-- `GET /v1/teams/:team_name/gateways` - List gateways
+| Capability | Graph Feature |
+| ---------- | ------------- |
+| `gateways.list` | Gateway nodes |
+| `resource_groups.list` | Project grouping |
+| `projects.list` | Project nodes |
+| `team.servers.list` | Server nodes |
 
 **Files Involved:**
-- `src/services/opaApiService.js` - OPA API client with token management and caching
-- `src/controllers/apiController.js` - API endpoint handler
-- `src/routes/api.js` - API route definitions
-- `public/js/sessionList.js` - Client-side dropdown population
+- `src/services/opaApiService.js` - OPA API client with token management
+- `src/services/opaGraphService.js` - Graph data fetching and processing
 
 ## Security Considerations
 

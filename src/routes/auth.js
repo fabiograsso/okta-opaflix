@@ -11,6 +11,7 @@ function createAuthRoutes(logger, config) {
   // Post-login redirect handler - redirects to original URL stored before login
   router.get('/auth/redirect', (req, res) => {
     let returnTo = req.session?.returnTo;
+    const user = req.session?.passport?.user;
 
     // Validate returnTo to prevent open redirect attacks
     // Only allow relative paths starting with /
@@ -23,7 +24,12 @@ function createAuthRoutes(logger, config) {
       delete req.session.returnTo;
     }
 
-    logger.debug('Post-login redirect', { returnTo });
+    logger.debug('User authenticated via OIDC', {
+      email: user?.email,
+      name: user?.name,
+      sub: user?.sub,
+      returnTo,
+    });
     res.redirect(returnTo);
   });
 

@@ -1,6 +1,6 @@
 {
   "name": "opaflix",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Okta Privileged Access Session Replay Tool - Web application for replaying OPA SSH and RDP sessions from AWS S3",
   "main": "src/index.js",
   "scripts": {

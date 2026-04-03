@@ -80,9 +80,9 @@
 <script src="{{asset '/js/sessionList.js'}}"></script>
 <script id="sessionListConfig" type="application/json">
 {
-  "sortField": {{json sortField}},
-  "sortOrder": {{json sortOrder}},
-  "sessionType": {{json typeFilter}},
+  "sortField": {{{json sortField}}},
+  "sortOrder": {{{json sortOrder}}},
+  "sessionType": {{{json typeFilter}}},
   "isRefreshing": {{#if isRefreshing}}true{{else}}false{{/if}}
 }
 </script>

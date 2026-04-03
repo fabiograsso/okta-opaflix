@@ -30,6 +30,7 @@
   - [Conversion Script](#conversion-script)
 - [API Reference](#-api-reference)
 - [Security](#-security)
+- [Scalability Considerations](#-scalability-considerations)
 - [Resources](#-resources)
 - [Author](#-author)
   - [Special Thanks](#-special-thanks)
@@ -84,12 +85,8 @@ Opaflix is built with *Node.js*, *Express*, and *Handlebars* for the backend, an
   - Real-time data from OPA API
 
 - **Single or Multi-Tenant** — Simple ENV-based config or database-backed multi-team deployment
-
-  > [!NOTE]
-  > **Deployment Modes** - Opaflix supports two modes:
-  >
-  > - **[Single-Tenant](#-single-tenant-mode)** (default): No database required, config from environment variables
-  > - **[Multi-Tenant](#-multi-tenant-mode)**: PostgreSQL database required, supports multiple teams with isolated configs.
+  - **[Single-Tenant](#-single-tenant-mode)** (default): No database required, config from environment variables
+  - **[Multi-Tenant](#-multi-tenant-mode)**: PostgreSQL database required, supports multiple teams with isolated configs.
 
 - **Configuration UI** — Web interface for managing tenant settings (multi-tenant) or viewing current config (single-tenant):
   - *Authentication Method Selector* — Choose between Access Keys or IAM Roles Anywhere
@@ -817,6 +814,36 @@ Response:
   "checks": { "server": "ok", "s3": "ok", "memory": "ok" }
 }
 ```
+
+---
+
+## 📊 Scalability Considerations
+
+Opaflix stores session indices in JSONB format for fast search and pagination. The table below shows estimated memory usage and S3 listing times for different session counts:
+
+| Sessions | JSONB Size | In-Memory | S3 Listing Time | Recommendation |
+|----------|-----------|-----------|-----------------|----------------|
+| 1,000 | ~350 KB | ~900 KB | ~0.2s | ✅ Optimal |
+| 10,000 | ~3.5 MB | ~9 MB | ~2s | ✅ Good |
+| 25,000 | ~9 MB | ~23 MB | ~5s | ✅ Good |
+| 50,000 | ~18 MB | ~45 MB | ~10s | ⚠️ Acceptable |
+| 75,000 | ~26 MB | ~68 MB | ~15s | ⚠️ Acceptable |
+| 100,000 | ~35 MB | ~90 MB | ~20s | ⚠️ Near limit |
+| 200,000 | ~70 MB | ~180 MB | ~40s | ❌ Consider alternatives |
+| 300,000 | ~105 MB | ~270 MB | ~60s | ❌ Not recommended |
+| 500,000 | ~175 MB | ~450 MB | ~1.5 min | ❌ Not recommended |
+| 1,000,000 | ~350 MB | ~900 MB | ~3 min | ❌ Architecture change needed |
+
+**Notes:**
+- *JSONB Size*: Storage in PostgreSQL `session_indices` table (~350 bytes per session)
+- *In-Memory*: RAM usage when index is loaded with enriched fields (~2.5x storage)
+- *S3 Listing Time*: Initial index build time (1,000 objects per API call, ~200ms each)
+
+> [!IMPORTANT]
+> For deployments exceeding **100,000 sessions**, consider:
+> - Implementing time-based partitioning (archive old sessions)
+> - Migrating to a dedicated sessions table with proper SQL indexing
+> - Using event-driven architecture (S3 triggers → Lambda → DB)
 
 ---
 

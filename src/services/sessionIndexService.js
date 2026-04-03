@@ -10,7 +10,7 @@
 const { isDatabaseEnabled, query } = require('./databaseService');
 const { getLogger } = require('../config/logger');
 const { listSessions } = require('./s3Service');
-const { enrichSessionWithMetadata, sortSessionsByDate } = require('./fileParser');
+const { enrichSessionWithMetadata, toStorageFormat, sortSessionsByDate } = require('./fileParser');
 const { calculatePagination, getPageSlice, getPageNumbers } = require('../utils/paginationHelper');
 
 const logger = getLogger();
@@ -129,11 +129,20 @@ async function loadIndexFromDatabase(tenantId) {
 
     const index = { ssh: [], rdp: [], lastUpdated: null };
     for (const row of result.rows) {
-      const sessions = (row.index_data?.sessions || []).map(s => ({
-        ...s,
-        timestamp: s.timestamp ? new Date(s.timestamp) : null,
-        lastModified: s.lastModified ? new Date(s.lastModified) : null,
-      }));
+      // Rebuild derived fields from minimal stored data
+      const sessions = (row.index_data?.sessions || []).map(s => {
+        // Parse dates
+        const session = {
+          ...s,
+          timestamp: s.timestamp ? new Date(s.timestamp) : null,
+          lastModified: s.lastModified ? new Date(s.lastModified) : null,
+        };
+        // Enrich with derived fields (fileId, displayTimestamp, displaySize)
+        const enriched = enrichSessionWithMetadata(session);
+        // Rebuild searchable text
+        enriched.searchableText = buildSearchableText(enriched);
+        return enriched;
+      });
       index[row.session_type] = sessions;
       if (row.last_refreshed) {
         const refreshed = new Date(row.last_refreshed);
@@ -166,12 +175,14 @@ async function saveIndexToDatabase(tenantId, index) {
 
   try {
     for (const type of ['ssh', 'rdp']) {
+      // Convert to minimal storage format (removes derived/redundant fields)
+      const minimalSessions = index[type].map(toStorageFormat);
       await query(
         `INSERT INTO session_indices (tenant_id, session_type, index_data, session_count, last_refreshed)
          VALUES ($1, $2, $3, $4, NOW())
          ON CONFLICT (tenant_id, session_type)
          DO UPDATE SET index_data = $3, session_count = $4, last_refreshed = NOW()`,
-        [tenantId, type, JSON.stringify({ sessions: index[type] }), index[type].length]
+        [tenantId, type, JSON.stringify({ sessions: minimalSessions }), index[type].length]
       );
     }
     logger.debug('Saved index to database', { tenantId });
@@ -184,7 +195,7 @@ async function saveIndexToDatabase(tenantId, index) {
  * Build searchable text for a session
  */
 function buildSearchableText(session) {
-  return [session.serverName, session.username, session.projectName, session.teamName, session.type, session.displayTimestamp]
+  return [session.serverName, session.username, session.projectName, session.type, session.displayTimestamp]
     .filter(Boolean)
     .join(' ')
     .toLowerCase();
@@ -384,7 +395,6 @@ function applyAdvancedFilters(sessions, filters) {
     if (filters.server && !session.serverName?.toLowerCase().includes(filters.server.toLowerCase())) return false;
     if (filters.username && !session.username?.toLowerCase().includes(filters.username.toLowerCase())) return false;
     if (filters.project && !session.projectName?.toLowerCase().includes(filters.project.toLowerCase())) return false;
-    if (filters.team && !session.teamName?.toLowerCase().includes(filters.team.toLowerCase())) return false;
 
     if (filters.dateFrom || filters.dateTo) {
       const sessionDate = session.timestamp ? new Date(session.timestamp) : null;

@@ -465,7 +465,7 @@ async function getGateways(tenantConfig) {
 /**
  * Fetch all filter options for dropdown population
  * @param {Object} tenantConfig - Tenant configuration object
- * @returns {Promise<Object>} Object with servers, users, projects, teams arrays
+ * @returns {Promise<Object>} Object with servers, users, projects arrays
  */
 async function getAllFilterOptions(tenantConfig) {
   if (!isEnabled(tenantConfig)) {
@@ -474,18 +474,16 @@ async function getAllFilterOptions(tenantConfig) {
       servers: [],
       users: [],
       projects: [],
-      teams: [],
       gateways: [],
     };
   }
 
   try {
     // Fetch all data in parallel
-    const [servers, users, projects, teams, gateways] = await Promise.all([
+    const [servers, users, projects, gateways] = await Promise.all([
       getServers(tenantConfig),
       getUsers(tenantConfig),
       getProjects(tenantConfig),
-      getGroups(tenantConfig),
       getGateways(tenantConfig),
     ]);
 
@@ -494,7 +492,6 @@ async function getAllFilterOptions(tenantConfig) {
       servers,
       users,
       projects,
-      teams,
       gateways,
     };
   } catch (error) {
@@ -504,7 +501,6 @@ async function getAllFilterOptions(tenantConfig) {
       servers: [],
       users: [],
       projects: [],
-      teams: [],
       gateways: [],
     };
   }

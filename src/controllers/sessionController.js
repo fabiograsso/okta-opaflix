@@ -16,7 +16,6 @@ function extractAdvancedFilters(query) {
     server: query.server || '',
     username: query.username || '',
     project: query.project || '',
-    team: query.team || '',
     dateFrom: query.dateFrom || '',
     dateTo: query.dateTo || '',
     type: query.type || '', // 'ssh', 'rdp', or '' (all)
@@ -59,7 +58,6 @@ function hasActiveFilters(filters, searchQuery) {
     filters.server ||
     filters.username ||
     filters.project ||
-    filters.team ||
     filters.dateFrom ||
     filters.dateTo
   );

@@ -277,13 +277,11 @@ async function listSessions(tenantConfig, type, continuationToken = null) {
 
     const response = await client.send(command);
 
-    // Filter by extension and map to session objects
+    // Filter by extension and map to minimal session objects
     const sessions = (response.Contents || [])
       .filter(obj => obj.Key.endsWith(extension))
       .map(obj => ({
         key: obj.Key,
-        // Use the full key as fileId (contains all metadata for parsing)
-        fileId: obj.Key,
         size: obj.Size,
         lastModified: obj.LastModified,
       }));

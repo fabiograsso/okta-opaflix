@@ -50,16 +50,11 @@ function parseSessionFilename(filename) {
   if (parts.length < 7) {
     // Return partial metadata if we can't fully parse
     return {
-      filename: basename,
       type,
       timestamp: null,
-      dateTime: null,
-      teamName: null,
       projectName: null,
       serverName: null,
       username: null,
-      hash: parts[parts.length - 1] || null,
-      raw: nameWithoutExt,
     };
   }
 
@@ -83,31 +78,45 @@ function parseSessionFilename(filename) {
   }
 
   return {
-    filename: basename,
     type: parts[0].toLowerCase(),
     timestamp,
-    dateTime: dateTimeStr,
-    teamName: parts[2] || null,
     projectName: parts[3] || null,
     serverName: parts[4] || null,
     username: parts[5] || null,
-    hash: parts[6] || null,
-    raw: nameWithoutExt,
   };
 }
 
 function enrichSessionWithMetadata(session) {
-  const parsed = parseSessionFilename(session.fileId || session.key);
+  const parsed = parseSessionFilename(session.key);
 
   return {
     ...session,
     ...parsed,
+    // Derived fields (computed on load, not stored)
+    fileId: session.key,
     displayTimestamp: parsed?.timestamp
       ? formatDateTime(parsed.timestamp)
       : session.lastModified
         ? formatDateTime(session.lastModified)
         : 'Unknown',
     displaySize: formatFileSize(session.size),
+  };
+}
+
+/**
+ * Extract minimal fields for database storage
+ * Removes derived/redundant fields to reduce storage size
+ */
+function toStorageFormat(session) {
+  return {
+    key: session.key,
+    type: session.type,
+    size: session.size,
+    timestamp: session.timestamp,
+    lastModified: session.lastModified,
+    serverName: session.serverName,
+    username: session.username,
+    projectName: session.projectName,
   };
 }
 
@@ -156,7 +165,7 @@ function sortSessionsByDate(sessions, order = 'desc') {
 
 /**
  * Filter sessions by search query
- * Searches across: serverName, username, projectName, teamName
+ * Searches across: serverName, username, projectName, type
  */
 function filterSessions(sessions, query) {
   if (!query || query.trim() === '') {
@@ -170,7 +179,6 @@ function filterSessions(sessions, query) {
       session.serverName,
       session.username,
       session.projectName,
-      session.teamName,
       session.type,
     ];
 
@@ -213,6 +221,7 @@ function sortSessionsByField(sessions, field, order = 'asc') {
 module.exports = {
   parseSessionFilename,
   enrichSessionWithMetadata,
+  toStorageFormat,
   formatFileSize,
   formatDateTime,
   sortSessionsByDate,

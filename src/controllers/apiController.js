@@ -52,7 +52,6 @@ async function getFilterOptions(req, res, next) {
         servers: [],
         users: [],
         projects: [],
-        teams: [],
         gateways: [],
       });
     }
@@ -63,7 +62,6 @@ async function getFilterOptions(req, res, next) {
       servers: options.servers?.length || 0,
       users: options.users?.length || 0,
       projects: options.projects?.length || 0,
-      teams: options.teams?.length || 0,
       gateways: options.gateways?.length || 0,
     });
 
@@ -81,7 +79,6 @@ async function getFilterOptions(req, res, next) {
       servers: [],
       users: [],
       projects: [],
-      teams: [],
       gateways: [],
     });
   }

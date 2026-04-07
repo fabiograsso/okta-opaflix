@@ -40,7 +40,7 @@ async function showDashboard(req, res, next) {
     );
 
     // Get stats from the session index (now that index is loaded)
-    const stats = getStats(tenantId);
+    const stats = getStats(tenantId, tenantContext.config);
 
     // Calculate total storage from ALL sessions in the index
     const allSessions = [...(indexState.ssh || []), ...(indexState.rdp || [])];

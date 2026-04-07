@@ -108,6 +108,9 @@ async function showConfig(req, res, next) {
         keyId: tenantConfig.opaApi?.keyId || '',
         keySecretMasked: maskSecret(tenantConfig.opaApi?.keySecret),
       },
+      opaflix: {
+        sessionIndexRefreshMinutes: parseInt(tenantConfig.opaflix?.sessionIndexRefreshMinutes, 10) || 15,
+      },
     };
 
     res.render('config', {
@@ -205,6 +208,18 @@ async function updateConfig(req, res, next) {
     }
     if (req.body['opaApi.keySecret']) {
       updates['opaApi.keySecret'] = req.body['opaApi.keySecret'];
+    }
+
+    // Extract Opaflix advanced config (only store non-default values)
+    const refreshMinutesRaw = req.body['opaflix.sessionIndexRefreshMinutes'];
+    if (refreshMinutesRaw !== undefined && refreshMinutesRaw !== '') {
+      const refreshMinutes = parseInt(refreshMinutesRaw, 10);
+      if (!isNaN(refreshMinutes) && refreshMinutes !== 15 && refreshMinutes >= 1 && refreshMinutes <= 60) {
+        updates['opaflix.sessionIndexRefreshMinutes'] = String(refreshMinutes);
+      } else if (refreshMinutes === 15) {
+        // Delete if set back to default
+        keysToDelete.push('opaflix.sessionIndexRefreshMinutes');
+      }
     }
 
     if (Object.keys(updates).length === 0 && keysToDelete.length === 0) {

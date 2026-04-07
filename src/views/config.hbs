@@ -405,6 +405,32 @@
         </div>
       </section>
 
+      <!-- Advanced Settings (Collapsible) -->
+      <section class="config-section config-section--collapsible">
+        <button type="button" class="config-subsection__toggle" id="advancedToggle" data-target="advancedContent">
+          <svg class="config-subsection__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+          <h2>Advanced Settings</h2>
+        </button>
+        <div id="advancedContent" class="config-subsection__content" style="display: none;">
+          <div class="config-row">
+            <label class="config-row__label" for="sessionIndexRefresh">Session Index Refresh</label>
+            <div class="config-row__field">
+              <div class="config-input-group config-input-group--inline">
+                <input type="number" id="sessionIndexRefresh" name="opaflix.sessionIndexRefreshMinutes"
+                       class="config-input config-input--small"
+                       value="{{config.opaflix.sessionIndexRefreshMinutes}}"
+                       min="1" max="60" placeholder="15"
+                       {{#if readOnly}}readonly{{/if}}>
+                <span class="config-input-suffix">minutes</span>
+              </div>
+              <span class="config-hint">How often to check for new sessions (default: 15 min)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
 

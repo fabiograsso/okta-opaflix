@@ -123,7 +123,7 @@ async function getRefreshStatusEndpoint(req, res, next) {
     const { tenantContext } = req;
     const tenantId = tenantContext.tenantId;
 
-    const status = getRefreshStatus(tenantId);
+    const status = getRefreshStatus(tenantId, tenantContext.config);
 
     res.status(200).json({
       lastUpdated: status.lastUpdated,

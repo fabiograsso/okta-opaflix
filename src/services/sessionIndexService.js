@@ -63,12 +63,14 @@ function getTenantIndexState(teamId) {
 /**
  * Check if index is stale for team
  * @param {string} teamId - Team ID
- * @param {number} maxAgeMinutes - Maximum age in minutes before considered stale
+ * @param {Object} tenantConfig - Optional tenant config with per-tenant refresh settings
  * @returns {boolean} True if index is stale or doesn't exist
  */
-function isStale(teamId, maxAgeMinutes = staleThresholdMinutes) {
+function isStale(teamId, tenantConfig = null) {
   const state = tenantIndices.get(teamId);
   if (!state?.lastUpdated) return true;
+  // Use per-tenant setting if available, otherwise global default
+  const maxAgeMinutes = parseInt(tenantConfig?.opaflix?.sessionIndexRefreshMinutes, 10) || staleThresholdMinutes;
   const ageMs = Date.now() - state.lastUpdated.getTime();
   return ageMs > maxAgeMinutes * 60 * 1000;
 }
@@ -76,9 +78,10 @@ function isStale(teamId, maxAgeMinutes = staleThresholdMinutes) {
 /**
  * Get refresh status for team
  * @param {string} teamId - Team ID
+ * @param {Object} tenantConfig - Optional tenant config with per-tenant refresh settings
  * @returns {object} Refresh status object
  */
-function getRefreshStatus(teamId) {
+function getRefreshStatus(teamId, tenantConfig = null) {
   const state = tenantIndices.get(teamId);
   if (!state) {
     return {
@@ -96,7 +99,7 @@ function getRefreshStatus(teamId) {
   return {
     // If we have sessions but no lastUpdated timestamp, use current time as fallback
     lastUpdated: state.lastUpdated || (sessionCount > 0 ? new Date() : null),
-    isStale: isStale(teamId),
+    isStale: isStale(teamId, tenantConfig),
     isBuilding: state.isBuilding,
     buildProgress: state.buildProgress,
     sessionCount: sessionCount,
@@ -479,8 +482,9 @@ async function getPagedResults(tenantId, tenantConfig, type, page, pageSize, sea
 /**
  * Get stats for tenant
  * @param {string} tenantId - Tenant ID
+ * @param {Object} tenantConfig - Optional tenant config with per-tenant settings
  */
-function getStats(tenantId) {
+function getStats(tenantId, tenantConfig = null) {
   const state = tenantIndices.get(tenantId);
   if (!state) {
     return {
@@ -499,7 +503,7 @@ function getStats(tenantId) {
     totalCount: state.ssh.length + state.rdp.length,
     lastUpdated: state.lastUpdated,
     isBuilding: state.isBuilding,
-    isStale: isStale(tenantId),
+    isStale: isStale(tenantId, tenantConfig),
     buildProgress: state.buildProgress,
   };
 }

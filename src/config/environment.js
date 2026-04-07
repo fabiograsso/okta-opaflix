@@ -114,7 +114,7 @@ const envSchema = Joi.object({
 
   // Multi-tenant cache config
   CONFIG_CACHE_TTL_MINUTES: Joi.number().default(5),
-  SESSION_INDEX_REFRESH_MINUTES: Joi.number().default(5),
+  SESSION_INDEX_REFRESH_MINUTES: Joi.number().default(15),
 }).unknown(true);
 
 function validateEnvironment() {

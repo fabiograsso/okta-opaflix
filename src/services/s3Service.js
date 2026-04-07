@@ -403,12 +403,18 @@ async function checkS3Health(tenantConfig) {
  * Generate a presigned URL for direct S3 access
  * @param {object} tenantConfig - Tenant configuration with AWS credentials
  * @param {string} key - S3 object key
- * @param {number} expiresIn - URL expiration in seconds
+ * @param {number} expiresIn - URL expiration in seconds (optional, uses tenant config or default)
  * @returns {Promise<string>} Presigned URL
  */
-async function getPresignedUrl(tenantConfig, key, expiresIn = PRESIGNED_URL_EXPIRES_IN) {
+async function getPresignedUrl(tenantConfig, key, expiresIn = null) {
   const client = await createS3Client(tenantConfig);
   const bucketName = tenantConfig.aws.bucket;
+
+  // Use per-tenant setting if available, otherwise provided value or global default
+  if (expiresIn === null) {
+    const expiryMinutes = parseInt(tenantConfig.aws?.presignedUrlExpiryMinutes, 10) || (PRESIGNED_URL_EXPIRES_IN / 60);
+    expiresIn = expiryMinutes * 60;
+  }
 
   try {
     const command = new GetObjectCommand({

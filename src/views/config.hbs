@@ -425,7 +425,37 @@
                        {{#if readOnly}}readonly{{/if}}>
                 <span class="config-input-suffix">minutes</span>
               </div>
-              <span class="config-hint">How often to check for new sessions (default: 15 min)</span>
+              <span class="config-hint">How often to check for new sessions (default: 15 min)<br/>⚠️ Changing this value may impact performance, especially with large S3 buckets.</span>
+            </div>
+          </div>
+
+          <div class="config-row">
+            <label class="config-row__label" for="defaultPageSize">Default Page Size</label>
+            <div class="config-row__field">
+              <div class="config-input-group config-input-group--inline">
+                <input type="number" id="defaultPageSize" name="opaflix.defaultPageSize"
+                       class="config-input config-input--small"
+                       value="{{config.opaflix.defaultPageSize}}"
+                       min="10" max="100" placeholder="50"
+                       {{#if readOnly}}readonly{{/if}}>
+                <span class="config-input-suffix">sessions per page</span>
+              </div>
+              <span class="config-hint">Number of sessions shown per page (default: 50, range: 10-100)</span>
+            </div>
+          </div>
+
+          <div class="config-row">
+            <label class="config-row__label" for="presignedUrlExpiry">S3 Presigned URL Expiry</label>
+            <div class="config-row__field">
+              <div class="config-input-group config-input-group--inline">
+                <input type="number" id="presignedUrlExpiry" name="aws.presignedUrlExpiryMinutes"
+                       class="config-input config-input--small"
+                       value="{{config.aws.presignedUrlExpiryMinutes}}"
+                       min="5" max="720" placeholder="240"
+                       {{#if readOnly}}readonly{{/if}}>
+                <span class="config-input-suffix">minutes</span>
+              </div>
+              <span class="config-hint">How long playback URLs remain valid (default: 240 min = 4 hours)</span>
             </div>
           </div>
         </div>

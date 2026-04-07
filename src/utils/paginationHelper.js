@@ -37,11 +37,14 @@ function calculatePagination(totalCount, currentPage, pageSize) {
  * Validate and normalize pagination parameters
  * @param {number|string} page - Page number from request
  * @param {number|string} pageSize - Page size from request
+ * @param {Object} tenantConfig - Optional tenant config with per-tenant page size
  * @returns {object} Validated { page, pageSize }
  */
-function validatePaginationParams(page, pageSize) {
+function validatePaginationParams(page, pageSize, tenantConfig = null) {
   let validPage = parseInt(page, 10) || 1;
-  let validPageSize = parseInt(pageSize, 10) || PAGINATION.DEFAULT_PAGE_SIZE;
+  // Use per-tenant default if available, otherwise global default
+  const defaultPageSize = parseInt(tenantConfig?.opaflix?.defaultPageSize, 10) || PAGINATION.DEFAULT_PAGE_SIZE;
+  let validPageSize = parseInt(pageSize, 10) || defaultPageSize;
 
   // Clamp page to minimum of 1
   validPage = Math.max(1, validPage);

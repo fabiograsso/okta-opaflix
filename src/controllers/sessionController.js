@@ -95,7 +95,7 @@ function getActiveTab(type) {
 async function listSessions(req, res, next) {
   try {
     const { tenantContext } = req;
-    const { page, pageSize } = validatePaginationParams(req.query.page, req.query.pageSize);
+    const { page, pageSize } = validatePaginationParams(req.query.page, req.query.pageSize, tenantContext.config);
     const searchQuery = req.query.q || '';
 
     // Validate sortField against allowed values to prevent injection

@@ -110,8 +110,12 @@ async function showConfig(req, res, next) {
       },
       opaflix: {
         sessionIndexRefreshMinutes: parseInt(tenantConfig.opaflix?.sessionIndexRefreshMinutes, 10) || 15,
+        defaultPageSize: parseInt(tenantConfig.opaflix?.defaultPageSize, 10) || 50,
       },
     };
+
+    // Add presignedUrlExpiryMinutes to AWS section
+    displayConfig.aws.presignedUrlExpiryMinutes = parseInt(tenantConfig.aws?.presignedUrlExpiryMinutes, 10) || 240;
 
     res.render('config', {
       title: 'Configuration',
@@ -219,6 +223,26 @@ async function updateConfig(req, res, next) {
       } else if (refreshMinutes === 15) {
         // Delete if set back to default
         keysToDelete.push('opaflix.sessionIndexRefreshMinutes');
+      }
+    }
+
+    const pageSizeRaw = req.body['opaflix.defaultPageSize'];
+    if (pageSizeRaw !== undefined && pageSizeRaw !== '') {
+      const pageSize = parseInt(pageSizeRaw, 10);
+      if (!isNaN(pageSize) && pageSize !== 50 && pageSize >= 10 && pageSize <= 100) {
+        updates['opaflix.defaultPageSize'] = String(pageSize);
+      } else if (pageSize === 50) {
+        keysToDelete.push('opaflix.defaultPageSize');
+      }
+    }
+
+    const presignedExpiryRaw = req.body['aws.presignedUrlExpiryMinutes'];
+    if (presignedExpiryRaw !== undefined && presignedExpiryRaw !== '') {
+      const presignedExpiry = parseInt(presignedExpiryRaw, 10);
+      if (!isNaN(presignedExpiry) && presignedExpiry !== 240 && presignedExpiry >= 5 && presignedExpiry <= 720) {
+        updates['aws.presignedUrlExpiryMinutes'] = String(presignedExpiry);
+      } else if (presignedExpiry === 240) {
+        keysToDelete.push('aws.presignedUrlExpiryMinutes');
       }
     }
 

@@ -22,8 +22,8 @@ Use Amazon Bedrock (Claude) to automatically analyze session recordings for secu
 - **Storage**: New tables (`session_analysis`, `analysis_jobs`) for results and queue
 
 **Status**: Planned · Spec: `docs/todo/ai-analysis.md`
-**Priority**: ⭐⭐⭐ High · **Complexity**: 14-18 hours
-**Value**: High value for security teams, compliance, incident response
+**Priority**: ⭐⭐⭐ High · **Complexity**: High
+**Value**: Security teams, compliance, incident response
 
 ---
 
@@ -35,7 +35,7 @@ Track who accessed which sessions and when - essential for compliance and forens
 - Export audit logs to CSV/JSON for compliance reports
 - Store in `audit_logs` table with retention policy
 
-**Priority**: ⭐⭐⭐ High · **Complexity**: Low-Medium (3-4 hours)
+**Priority**: ⭐⭐⭐ High · **Complexity**: Low-Medium
 **Value**: Compliance requirement for many organizations
 
 ---
@@ -48,7 +48,7 @@ Currently all authenticated users see all sessions - add granular permissions.
 - **Server-Level Restrictions**: Limit access by server groups
 - Store in `user_roles`, `role_permissions` tables
 
-**Priority**: ⭐⭐⭐ High · **Complexity**: Medium-High (8-10 hours)
+**Priority**: ⭐⭐⭐ High · **Complexity**: Medium-High
 **Value**: Security requirement for multi-team deployments
 
 ---
@@ -61,7 +61,7 @@ Allow users to mark sessions for follow-up or categorization.
 - Filter sessions by bookmark status
 - Store in `session_bookmarks` table
 
-**Priority**: ⭐⭐ Medium-High · **Complexity**: Low (2-3 hours)
+**Priority**: ⭐⭐ Medium-High · **Complexity**: Low
 **Value**: Improves investigation workflow
 
 ---
@@ -74,7 +74,7 @@ Generate time-limited shareable links for specific sessions.
 - No authentication required (or PIN-only)
 - Track share access in audit log
 
-**Priority**: ⭐⭐ Medium · **Complexity**: Medium (4-5 hours)
+**Priority**: ⭐⭐ Medium · **Complexity**: Medium
 **Value**: Collaboration, external auditor access
 
 ---
@@ -87,7 +87,7 @@ Export search results and session data.
 - **Bulk Download**: Multiple session files as .zip
 - **Compliance Reports**: Pre-formatted for SOC2, ISO27001
 
-**Priority**: ⭐⭐ Medium · **Complexity**: Low-Medium (3-4 hours)
+**Priority**: ⭐⭐ Medium · **Complexity**: Low-Medium
 **Value**: Reporting requirement for audits
 
 ---
@@ -100,7 +100,7 @@ Automatic cleanup of old sessions based on configurable policies.
 - Compliance with data retention regulations (GDPR, HIPAA)
 - Dashboard showing storage costs and archival status
 
-**Priority**: ⭐⭐ Medium · **Complexity**: Medium (5-6 hours)
+**Priority**: ⭐⭐ Medium · **Complexity**: Medium
 **Value**: Cost optimization + compliance
 
 ---
@@ -113,7 +113,7 @@ Proactive notifications for security events.
 - Configurable alert rules per tenant
 - Alert on specific patterns (sudo commands, file access, etc.)
 
-**Priority**: ⭐⭐ Medium-High · **Complexity**: Medium (4-5 hours)
+**Priority**: ⭐⭐ Medium-High · **Complexity**: Medium
 **Value**: Proactive security monitoring
 
 ---
@@ -126,7 +126,7 @@ Investigation collaboration features.
 - Mention other users (@username)
 - Searchable comment history
 
-**Priority**: ⭐ Medium · **Complexity**: Low (2-3 hours)
+**Priority**: ⭐ Medium · **Complexity**: Low
 **Value**: Team collaboration during investigations
 
 ---
@@ -140,7 +140,7 @@ Enhanced statistics beyond current dashboard.
 - Anomaly detection (unusual access patterns)
 - Trend analysis (session volume over time)
 
-**Priority**: ⭐ Low-Medium · **Complexity**: Low-Medium (4-5 hours)
+**Priority**: ⭐ Low-Medium · **Complexity**: Low-Medium
 **Value**: Security insights, capacity planning
 
 ---
@@ -153,7 +153,7 @@ Compare two sessions side-by-side.
 - Identify behavior changes between sessions
 - Useful for detecting baseline deviations
 
-**Priority**: ⭐ Low · **Complexity**: Medium-High (6-8 hours)
+**Priority**: ⭐ Low · **Complexity**: Medium-High
 **Value**: Advanced investigation feature
 
 ---
@@ -168,7 +168,7 @@ Programmatic access for external tools and automation.
 - API key authentication (separate from OIDC)
 - Rate limiting per API key
 
-**Priority**: ⭐⭐ Medium · **Complexity**: Low-Medium (4-5 hours)
+**Priority**: ⭐⭐ Medium · **Complexity**: Low-Medium
 **Value**: Automation, SIEM integration, custom dashboards
 
 ---
@@ -181,7 +181,7 @@ Watch active sessions in real-time as they happen.
 - Session interruption capability
 - Requires gateway-level integration
 
-**Priority**: ⭐ Low · **Complexity**: Very High (20+ hours)
+**Priority**: ⭐ Low · **Complexity**: Very High
 **Value**: Real-time security monitoring (major architectural change)
 
 ---

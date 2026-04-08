@@ -1,0 +1,193 @@
+# TODO
+
+## Tech Debt
+
+- [ ] Add unit tests for core services
+- [ ] Add integration tests for API endpoints
+- [ ] Improve error messages consistency
+- [ ] Add OpenAPI/Swagger documentation for REST API
+
+---
+
+## New Features to Evaluate
+
+### 🤖 AI-Powered Session Analysis
+
+Use Amazon Bedrock (Claude) to automatically analyze session recordings for security threats:
+- **SSH Sessions**: Detect privilege escalation, data exfiltration, credential access, suspicious commands
+- **RDP Sessions** (future): OCR-based analysis for video recordings
+- **Triggers**: Manual (on-demand button) + Automatic (during index rebuild)
+- **Per-Tenant Config**: Enable/disable, model selection, auto-analyze SSH/RDP toggles
+- **UI**: Threat level badges in session list, detailed findings on playback page
+- **Storage**: New tables (`session_analysis`, `analysis_jobs`) for results and queue
+
+**Status**: Planned · Spec: `docs/todo/ai-analysis.md`
+**Priority**: ⭐⭐⭐ High · **Complexity**: 14-18 hours
+**Value**: High value for security teams, compliance, incident response
+
+---
+
+### 📊 Audit Logging
+
+Track who accessed which sessions and when - essential for compliance and forensics.
+- Log session playback events (who, when, what session)
+- Track search queries and filters used
+- Export audit logs to CSV/JSON for compliance reports
+- Store in `audit_logs` table with retention policy
+
+**Priority**: ⭐⭐⭐ High · **Complexity**: Low-Medium (3-4 hours)
+**Value**: Compliance requirement for many organizations
+
+---
+
+### 🔐 Role-Based Access Control (RBAC)
+
+Currently all authenticated users see all sessions - add granular permissions.
+- **Roles**: Admin, Auditor, Viewer (read-only)
+- **Project-Level Access**: Users only see sessions from assigned projects
+- **Server-Level Restrictions**: Limit access by server groups
+- Store in `user_roles`, `role_permissions` tables
+
+**Priority**: ⭐⭐⭐ High · **Complexity**: Medium-High (8-10 hours)
+**Value**: Security requirement for multi-team deployments
+
+---
+
+### 🔖 Session Bookmarks & Flags
+
+Allow users to mark sessions for follow-up or categorization.
+- Bookmark sessions as "reviewed", "flagged for investigation", "important"
+- Add notes/comments to bookmarked sessions
+- Filter sessions by bookmark status
+- Store in `session_bookmarks` table
+
+**Priority**: ⭐⭐ Medium-High · **Complexity**: Low (2-3 hours)
+**Value**: Improves investigation workflow
+
+---
+
+### 🔗 Session Sharing with Expiring Links
+
+Generate time-limited shareable links for specific sessions.
+- Expiring tokens (1 hour, 1 day, 1 week, custom)
+- Optional PIN protection for shared links
+- No authentication required (or PIN-only)
+- Track share access in audit log
+
+**Priority**: ⭐⭐ Medium · **Complexity**: Medium (4-5 hours)
+**Value**: Collaboration, external auditor access
+
+---
+
+### 📤 Export Capabilities
+
+Export search results and session data.
+- **CSV Export**: Filtered session list with metadata
+- **PDF Reports**: Session analysis results with findings
+- **Bulk Download**: Multiple session files as .zip
+- **Compliance Reports**: Pre-formatted for SOC2, ISO27001
+
+**Priority**: ⭐⭐ Medium · **Complexity**: Low-Medium (3-4 hours)
+**Value**: Reporting requirement for audits
+
+---
+
+### 🗄️ Retention Policies & Archival
+
+Automatic cleanup of old sessions based on configurable policies.
+- Per-tenant retention periods (30/60/90 days, 1 year, custom)
+- Archive to S3 Glacier before deletion (cost optimization)
+- Compliance with data retention regulations (GDPR, HIPAA)
+- Dashboard showing storage costs and archival status
+
+**Priority**: ⭐⭐ Medium · **Complexity**: Medium (5-6 hours)
+**Value**: Cost optimization + compliance
+
+---
+
+### 🔔 Alerting & Notifications
+
+Proactive notifications for security events.
+- Email/Slack alerts for critical threat sessions (from AI analysis)
+- Webhook integration for SIEM systems
+- Configurable alert rules per tenant
+- Alert on specific patterns (sudo commands, file access, etc.)
+
+**Priority**: ⭐⭐ Medium-High · **Complexity**: Medium (4-5 hours)
+**Value**: Proactive security monitoring
+
+---
+
+### 💬 Session Comments & Annotations
+
+Investigation collaboration features.
+- Add investigator comments to sessions
+- Timeline of notes with timestamps
+- Mention other users (@username)
+- Searchable comment history
+
+**Priority**: ⭐ Medium · **Complexity**: Low (2-3 hours)
+**Value**: Team collaboration during investigations
+
+---
+
+### 📈 Advanced Analytics Dashboard
+
+Enhanced statistics beyond current dashboard.
+- User activity heatmaps (time of day, day of week)
+- Server access frequency charts
+- Top users by session count/duration
+- Anomaly detection (unusual access patterns)
+- Trend analysis (session volume over time)
+
+**Priority**: ⭐ Low-Medium · **Complexity**: Low-Medium (4-5 hours)
+**Value**: Security insights, capacity planning
+
+---
+
+### 🔄 Session Comparison (Diff View)
+
+Compare two sessions side-by-side.
+- Diff view for SSH commands (unified or split)
+- Timeline synchronization for RDP videos
+- Identify behavior changes between sessions
+- Useful for detecting baseline deviations
+
+**Priority**: ⭐ Low · **Complexity**: Medium-High (6-8 hours)
+**Value**: Advanced investigation feature
+
+---
+
+### 🌐 REST API for External Integrations
+
+Programmatic access for external tools and automation.
+- `GET /api/v1/sessions` - List sessions with pagination
+- `GET /api/v1/sessions/:id` - Get session details
+- `GET /api/v1/sessions/:id/analysis` - Get AI analysis results
+- `POST /api/v1/sessions/:id/bookmark` - Bookmark session
+- API key authentication (separate from OIDC)
+- Rate limiting per API key
+
+**Priority**: ⭐⭐ Medium · **Complexity**: Low-Medium (4-5 hours)
+**Value**: Automation, SIEM integration, custom dashboards
+
+---
+
+### 📺 Live Session Monitoring (Future)
+
+Watch active sessions in real-time as they happen.
+- WebSocket streaming from OPA gateway
+- Real-time threat detection with AI
+- Session interruption capability
+- Requires gateway-level integration
+
+**Priority**: ⭐ Low · **Complexity**: Very High (20+ hours)
+**Value**: Real-time security monitoring (major architectural change)
+
+---
+
+## Priority Legend
+
+- ⭐⭐⭐ **High**: Should implement soon (compliance, security, core workflow)
+- ⭐⭐ **Medium**: Valuable but not urgent (UX improvements, collaboration)
+- ⭐ **Low**: Nice-to-have (advanced features, edge cases)

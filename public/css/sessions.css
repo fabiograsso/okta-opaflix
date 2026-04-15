@@ -4,8 +4,8 @@
 
 /* Sessions Table */
 .sessions-table-container {
-  background-color: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -65,8 +65,8 @@
   gap: 16px;
   margin-bottom: 16px;
   padding: 16px;
-  background-color: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
 }
@@ -94,7 +94,7 @@
 .search-box .search-input:focus {
   outline: none;
   border-color: var(--okta-blue);
-  background-color: #fff;
+  background-color: var(--color-surface);
   box-shadow: 0 0 0 3px var(--okta-blue-light);
 }
 
@@ -115,7 +115,8 @@
   border: 1px solid var(--okta-gray-300);
   border-radius: var(--border-radius);
   font-size: 13px;
-  background-color: #fff;
+  background-color: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -140,13 +141,13 @@
 }
 
 .badge-ssh {
-  background-color: #e6f4f9;
-  color: #0062a3;
+  background-color: var(--okta-blue-light);
+  color: var(--okta-blue-hover);
 }
 
 .badge-rdp {
-  background-color: #fef3cd;
-  color: #856404;
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 /* Table Cell Styles */
@@ -269,8 +270,8 @@
   gap: 16px;
   margin-top: 24px;
   padding: 16px;
-  background-color: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
 }
@@ -321,9 +322,9 @@
   padding: 0 8px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--okta-gray-700);
-  background-color: #fff;
-  border: 1px solid var(--okta-gray-300);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   text-decoration: none;
   transition: all 0.2s ease;
@@ -338,7 +339,7 @@
 .pagination-page.active {
   background-color: var(--okta-blue);
   border-color: var(--okta-blue);
-  color: #fff;
+  color: var(--color-text-inverse);
 }
 
 .pagination-ellipsis {
@@ -378,7 +379,8 @@
   border: 1px solid var(--okta-gray-300);
   border-radius: var(--border-radius);
   font-size: 14px;
-  background-color: #fff;
+  background-color: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 120px;
@@ -400,7 +402,7 @@
   padding: 0 5px;
   font-size: 11px;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text-inverse);
   background-color: var(--okta-red);
   border-radius: 9px;
   margin-left: 4px;
@@ -431,7 +433,7 @@
   padding: 4px 10px;
   font-size: 12px;
   color: var(--okta-blue-hover);
-  background-color: #fff;
+  background-color: var(--color-surface);
   border: 1px solid var(--okta-blue);
   border-radius: 12px;
 }
@@ -444,7 +446,7 @@
 
 .btn-danger-outline:hover {
   background-color: var(--okta-red);
-  color: #fff;
+  color: var(--color-text-inverse);
 }
 
 /* Modal Styles */
@@ -463,7 +465,7 @@
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: var(--color-surface);
   border-radius: 8px;
   box-shadow: var(--shadow-lg);
   width: 100%;
@@ -553,7 +555,8 @@
   font-size: 14px;
   border: 1px solid var(--okta-gray-300);
   border-radius: var(--border-radius);
-  background-color: #fff;
+  background-color: var(--color-surface);
+  color: var(--color-text);
   transition: all 0.2s ease;
 }
 
@@ -605,7 +608,7 @@ select.form-input:disabled {
   right: 0;
   max-height: 240px;
   overflow-y: auto;
-  background: #fff;
+  background: var(--color-surface);
   border: 1px solid var(--okta-gray-300);
   border-top: none;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
@@ -637,7 +640,7 @@ select.form-input:disabled {
 
 .autocomplete-item.selected {
   background-color: var(--okta-blue);
-  color: #fff;
+  color: var(--color-text-inverse);
 }
 
 .autocomplete-empty {
@@ -705,8 +708,8 @@ select.form-input:disabled {
 }
 
 .session-info {
-  background-color: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   padding: 20px 24px;
   margin-bottom: 24px;
@@ -832,11 +835,11 @@ select.form-input:disabled {
 }
 
 .last-updated-dot.fresh {
-  background: #22c55e;
+  background: var(--okta-green);
 }
 
 .last-updated-dot.stale {
-  background: #f59e0b;
+  background: var(--okta-yellow);
 }
 
 .last-updated-dot.building {
@@ -845,7 +848,7 @@ select.form-input:disabled {
 }
 
 .last-updated-dot.error {
-  background: #ef4444;
+  background: var(--okta-red);
 }
 
 #lastUpdatedText {
@@ -983,9 +986,9 @@ select.form-input:disabled {
 
 .player-error,
 .video-error {
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
+  background-color: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger-text);
 }
 
 .player-error p,
@@ -1003,4 +1006,9 @@ select.form-input:disabled {
 .player-error a:hover,
 .video-error a:hover {
   text-decoration: none;
+}
+
+/* Dark mode overrides for SVG data URIs */
+[data-theme="dark"] select.form-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 }

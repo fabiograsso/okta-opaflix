@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Dark/light theme switcher with auto (OS), light, and dark modes
+- Theme toggle button in top header bar (before help icon)
+- User preference saved in cookie with 1-year expiry
+- FOUC prevention via inline script in `<head>`
+- Smooth transitions between themes
+- Dark mode scrollbar styling (WebKit)
+- Semantic CSS variables for theming (`--color-bg`, `--color-surface`, `--color-text`, `--color-border`, etc.)
+- Graph node color variables for dark mode support
+
+### Changed
+- Migrated hardcoded hex colors across all CSS files to semantic CSS variables
+- Bumped version to 0.3.0 for cache busting
+
 ---
 
 ## How to Update This Changelog

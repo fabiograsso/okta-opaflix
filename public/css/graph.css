@@ -46,8 +46,8 @@
 }
 
 .stats-cards .stat-card {
-  background-color: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   padding: 16px;
   box-shadow: var(--shadow-sm);
@@ -121,7 +121,7 @@
 
 .graph-controls .btn.active {
   background-color: var(--okta-blue);
-  color: #fff;
+  color: var(--color-text-inverse);
   border-color: var(--okta-blue);
 }
 
@@ -132,7 +132,7 @@
 
 .graph-controls-divider {
   width: 1px;
-  background-color: var(--border-color);
+  background-color: var(--color-border);
   margin: 0 4px;
 }
 
@@ -141,7 +141,7 @@
   width: 100%;
   flex: 1;
   min-height: 300px;
-  background: #fafafa;
+  background: var(--color-surface-alt);
   border-radius: var(--border-radius);
 }
 
@@ -188,7 +188,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #fff;
+  background: var(--node-inner-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,7 +203,7 @@
   margin-top: 6px;
   font-size: 11px;
   font-weight: 600;
-  color: #333;
+  color: var(--node-label-color);
   text-align: center;
   white-space: nowrap;
 }
@@ -211,50 +211,50 @@
 .circle-node-count {
   margin-top: 2px;
   font-size: 10px;
-  color: #666;
+  color: var(--node-count-color);
   text-align: center;
   white-space: nowrap;
 }
 
 .circle-node-count.orphan-badge {
-  color: #9c27b0;
+  color: var(--node-orphan-start);
   font-weight: 500;
 }
 
 /* Gateway Node - Blue */
 .gateway-node .circle-node-ring {
-  background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+  background: linear-gradient(135deg, var(--node-gateway-start) 0%, var(--node-gateway-end) 100%);
 }
 
 .gateway-node .node-icon {
-  color: #1a73e8;
+  color: var(--node-gateway-start);
 }
 
 /* Project Node - Green */
 .project-node .circle-node-ring {
-  background: linear-gradient(135deg, #34a853 0%, #4caf50 100%);
+  background: linear-gradient(135deg, var(--node-project-start) 0%, var(--node-project-end) 100%);
 }
 
 .project-node .node-icon {
-  color: #34a853;
+  color: var(--node-project-start);
 }
 
 /* Orphaned Project Node - Purple */
 .project-orphan-node .circle-node-ring {
-  background: linear-gradient(135deg, #9c27b0 0%, #ab47bc 100%);
+  background: linear-gradient(135deg, var(--node-orphan-start) 0%, var(--node-orphan-end) 100%);
 }
 
 .project-orphan-node .node-icon {
-  color: #9c27b0;
+  color: var(--node-orphan-start);
 }
 
 /* Server Node - Grey */
 .server-node .circle-node-ring {
-  background: linear-gradient(135deg, #5f6368 0%, #757575 100%);
+  background: linear-gradient(135deg, var(--node-server-start) 0%, var(--node-server-end) 100%);
 }
 
 .server-node .node-icon {
-  color: #5f6368;
+  color: var(--node-server-start);
 }
 
 /* ========================
@@ -307,8 +307,8 @@
 
 /* Rectangular Gateway Node - Blue */
 .rect-gateway-node {
-  background: #1a73e8;
-  color: #fff;
+  background: var(--node-gateway-start);
+  color: var(--color-text-inverse);
   min-width: 160px;
   cursor: default;
 }
@@ -319,8 +319,8 @@
 
 /* Rectangular Project Node - Green */
 .rect-project-node {
-  background: #34a853;
-  color: #fff;
+  background: var(--node-project-start);
+  color: var(--color-text-inverse);
 }
 
 .rect-project-node:hover {
@@ -329,8 +329,8 @@
 
 /* Rectangular Orphan Project Node - Purple */
 .rect-project-orphan-node {
-  background: #9c27b0;
-  color: #fff;
+  background: var(--node-orphan-start);
+  color: var(--color-text-inverse);
 }
 
 .rect-project-orphan-node:hover {
@@ -339,8 +339,8 @@
 
 /* Rectangular Server Node - Grey */
 .rect-server-node {
-  background: #5f6368;
-  color: #fff;
+  background: var(--node-server-start);
+  color: var(--color-text-inverse);
 }
 
 .rect-server-node:hover {
@@ -374,8 +374,8 @@
   width: 29px;
   height: 29px;
   border-radius: 50%;
-  background: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -400,8 +400,8 @@
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -433,10 +433,11 @@
 }
 
 .react-flow__controls-button {
-  background: #fff;
-  border-bottom: 1px solid var(--okta-gray-200);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
   width: 32px !important;
   height: 32px !important;
+  color: var(--color-text);
 }
 
 .react-flow__controls-button:hover {
@@ -449,13 +450,13 @@
 }
 
 .react-flow__edge-path {
-  stroke: #999;
+  stroke: var(--edge-color);
   stroke-width: 2;
 }
 
 /* Error Card */
 .error-card {
-  border-left: 4px solid #d32f2f;
+  border-left: 4px solid var(--okta-red);
   margin-bottom: 16px;
 }
 
@@ -467,7 +468,7 @@
 
 .error-item {
   padding: 8px 12px;
-  background: #ffebee;
+  background: var(--color-danger-bg);
   border-radius: 4px;
   font-size: 13px;
 }
@@ -517,8 +518,8 @@
 .node-popup-container {
   position: fixed;
   z-index: 1000;
-  background: #fff;
-  border: 1px solid var(--okta-gray-200);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   max-width: 420px;
@@ -659,11 +660,11 @@
 
 /* OS Icons in popup */
 .linux-icon {
-  color: #333;
+  color: var(--node-label-color);
 }
 
 .windows-icon {
-  color: #0078d4;
+  color: var(--okta-blue);
 }
 
 /* Fullscreen Mode */
@@ -675,7 +676,7 @@
   bottom: 0;
   height: 100vh;
   z-index: 100;
-  background: #fff;
+  background: var(--color-surface);
   padding: 0;
   margin: 0;
 }
@@ -745,8 +746,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 8px 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -766,10 +767,10 @@
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  border: 1px solid var(--okta-gray-300);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: #fff;
-  color: var(--okta-gray-700);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -827,7 +828,7 @@
 }
 
 .legend-popup {
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   max-width: 550px;
@@ -939,23 +940,23 @@
 }
 
 .legend-node-preview.gateway {
-  background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--node-gateway-start) 0%, var(--node-gateway-end) 100%);
+  color: var(--color-text-inverse);
 }
 
 .legend-node-preview.project {
-  background: linear-gradient(135deg, #34a853 0%, #4caf50 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--node-project-start) 0%, var(--node-project-end) 100%);
+  color: var(--color-text-inverse);
 }
 
 .legend-node-preview.orphan {
-  background: linear-gradient(135deg, #9c27b0 0%, #ab47bc 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--node-orphan-start) 0%, var(--node-orphan-end) 100%);
+  color: var(--color-text-inverse);
 }
 
 .legend-node-preview.server {
-  background: linear-gradient(135deg, #5f6368 0%, #757575 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--node-server-start) 0%, var(--node-server-end) 100%);
+  color: var(--color-text-inverse);
 }
 
 .legend-item-info {
@@ -1024,7 +1025,7 @@
 
 /* Edge styling with arrows */
 .react-flow__edge-path {
-  stroke: #999;
+  stroke: var(--edge-color);
   stroke-width: 2;
 }
 

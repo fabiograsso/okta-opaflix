@@ -32,15 +32,15 @@
 }
 
 .config-alert--success {
-  background: #ecfdf5;
-  border: 1px solid #6ee7b7;
-  color: #065f46;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success-text);
 }
 
 .config-alert--error {
-  background: #fef2f2;
-  border: 1px solid #fca5a5;
-  color: #991b1b;
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger-text);
 }
 
 /* Read-Only Banner (Single-Tenant Mode) */
@@ -49,15 +49,15 @@
   align-items: flex-start;
   gap: 12px;
   padding: 16px 20px;
-  background: #fef3c7;
-  border: 1px solid #fcd34d;
+  background: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
   border-radius: 8px;
   margin-bottom: 24px;
 }
 
 .config-readonly-banner svg {
   flex-shrink: 0;
-  color: #92400e;
+  color: var(--color-warning-text);
   margin-top: 2px;
 }
 
@@ -65,14 +65,14 @@
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #92400e;
+  color: var(--color-warning-text);
   margin-bottom: 4px;
 }
 
 .config-readonly-banner p {
   margin: 0;
   font-size: 13px;
-  color: #78350f;
+  color: var(--color-warning-text);
   line-height: 1.5;
 }
 
@@ -85,8 +85,8 @@
 
 /* Section */
 .config-section {
-  background: #fff;
-  border: 1px solid var(--okta-gray-200);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   margin-bottom: 24px;
   overflow: hidden;
@@ -162,7 +162,7 @@
 .config-subsection__content {
   padding: 0;
   border-top: 1px solid var(--okta-gray-100);
-  background: var(--okta-gray-25, #fafafa);
+  background: var(--color-surface-alt);
 }
 
 .config-subsection__note {
@@ -201,13 +201,13 @@
 }
 
 .config-tag--editable {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--okta-blue-50);
+  color: var(--okta-blue);
 }
 
 .config-tag--optional {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 /* Row - Left/Right Layout */
@@ -245,9 +245,9 @@
   padding: 9px 12px;
   font-size: 14px;
   font-family: inherit;
-  color: var(--okta-gray-900);
-  background: #fff;
-  border: 1px solid var(--okta-gray-300);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
@@ -312,8 +312,8 @@
   width: 32px;
   height: 32px;
   border-radius: 4px;
-  border: 1px solid var(--okta-gray-300);
-  background: #fff;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 /* Inline Input Group (input + suffix text) */
@@ -431,7 +431,7 @@
 
 .btn-primary {
   background: var(--okta-blue);
-  color: #fff;
+  color: var(--color-text-inverse);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -444,9 +444,9 @@
 }
 
 .btn-secondary {
-  background: #fff;
-  color: var(--okta-gray-700);
-  border: 1px solid var(--okta-gray-300);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
 }
 
 .btn-secondary:hover {
@@ -570,18 +570,18 @@
 }
 
 .config-cert-info--valid {
-  background: #f0fdf4;
-  border-color: #86efac;
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
 }
 
 .config-cert-info--expiring-soon {
-  background: #fffbeb;
-  border-color: #fcd34d;
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
 }
 
 .config-cert-info--expired {
-  background: #fef2f2;
-  border-color: #fca5a5;
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
 }
 
 .config-cert-info__cn {
@@ -613,24 +613,24 @@
 }
 
 .config-cert-badge--valid {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
 }
 
 .config-cert-badge--warning {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
 }
 
 .config-cert-badge--expired {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--color-danger-bg);
+  color: var(--color-danger-text);
 }
 
 /* Certificate error state */
 .config-cert-info--error {
-  background: #fef2f2;
-  border-color: #fca5a5;
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -651,8 +651,8 @@
   right: 0;
   max-height: 240px;
   overflow-y: auto;
-  background: #fff;
-  border: 1px solid var(--okta-gray-300);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-top: none;
   border-radius: 0 0 6px 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -682,7 +682,7 @@
 
 .autocomplete-item.selected {
   background-color: var(--okta-blue);
-  color: #fff;
+  color: var(--color-text-inverse);
 }
 
 .autocomplete-empty {
@@ -704,12 +704,12 @@
    Field Validation Errors
    =========================================== */
 .config-input--error {
-  border-color: #dc2626 !important;
-  background-color: #fef2f2;
+  border-color: var(--okta-red) !important;
+  background-color: var(--color-danger-bg);
 }
 
 .config-input--error:focus {
-  border-color: #dc2626 !important;
+  border-color: var(--okta-red) !important;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
 }
 
@@ -718,9 +718,9 @@
   margin-top: 6px;
   padding: 8px 10px;
   font-size: 12px;
-  color: #991b1b;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  color: var(--color-danger-text);
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
   border-radius: 4px;
   line-height: 1.4;
 }
@@ -735,4 +735,13 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23991b1b' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+/* Dark mode overrides for SVG data URIs */
+[data-theme="dark"] .config-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .config-field-error::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23fca5a5' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
 }

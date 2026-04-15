@@ -569,9 +569,6 @@ class OPASessionSync:
 
     def cleanup_old_files(self):
         """Delete source files older than configured number of days, only if uploaded to S3."""
-        # Refresh S3 cache to catch files uploaded by other processes
-        self.load_s3_file_list()
-
         if self.delete_after_days <= 0:
             return
 
@@ -579,32 +576,48 @@ class OPASessionSync:
             return
 
         cutoff_date = datetime.now() - timedelta(days=self.delete_after_days)
-        deleted_count = 0
-        skipped_count = 0
 
-        self.logger.debug(f"Cleaning up files older than {self.delete_after_days} days")
-
+        # First pass: count old files without S3 lookup
+        old_files = []
         for asa_file in self.source_dir.glob('*.asa'):
             try:
                 mtime = datetime.fromtimestamp(asa_file.stat().st_mtime)
                 if mtime < cutoff_date:
-                    filename = asa_file.name
-                    stem = asa_file.stem
+                    old_files.append(asa_file)
+            except Exception as e:
+                self.logger.warning(f"Could not check file age for {asa_file}: {e}")
 
-                    # Check if file has been uploaded to S3 before deleting
-                    in_s3 = False
-                    if filename.startswith('ssh~'):
-                        in_s3 = self.s3_file_exists(f"{stem}.cast")
-                    elif filename.startswith('rdp~'):
-                        in_s3 = self.s3_pattern_exists(f"{stem}.asa*.mkv") is not None
+        if not old_files:
+            self.logger.debug("No old files to clean up")
+            return
 
-                    if in_s3:
-                        asa_file.unlink()
-                        deleted_count += 1
-                        self.logger.info(f"Deleted old file: {filename} (modified {mtime})")
-                    else:
-                        skipped_count += 1
-                        self.logger.debug(f"Skipping old file not in S3: {filename}")
+        # Only refresh S3 cache if we actually have files to delete
+        self.logger.info(f"Found {len(old_files)} files older than {self.delete_after_days} days, refreshing S3 cache...")
+        self.load_s3_file_list()
+
+        deleted_count = 0
+        skipped_count = 0
+
+        for asa_file in old_files:
+            try:
+                mtime = datetime.fromtimestamp(asa_file.stat().st_mtime)
+                filename = asa_file.name
+                stem = asa_file.stem
+
+                # Check if file has been uploaded to S3 before deleting
+                in_s3 = False
+                if filename.startswith('ssh~'):
+                    in_s3 = self.s3_file_exists(f"{stem}.cast")
+                elif filename.startswith('rdp~'):
+                    in_s3 = self.s3_pattern_exists(f"{stem}.asa*.mkv") is not None
+
+                if in_s3:
+                    asa_file.unlink()
+                    deleted_count += 1
+                    self.logger.info(f"Deleted old file: {filename} (modified {mtime})")
+                else:
+                    skipped_count += 1
+                    self.logger.debug(f"Skipping old file not in S3: {filename}")
             except Exception as e:
                 self.logger.warning(f"Could not process old file {asa_file}: {e}")
 

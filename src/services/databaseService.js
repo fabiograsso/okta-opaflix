@@ -102,35 +102,81 @@ function getPoolForSessionStore() {
 }
 
 /**
- * Execute a query with logging
+ * Execute a query with logging and automatic retry on connection errors
  * @param {string} text - SQL query text
  * @param {Array} params - Query parameters
+ * @param {number} retries - Maximum number of retries for connection errors
  * @returns {Promise<Object>} Query result
- * @throws {Error} If database is disabled
+ * @throws {Error} If database is disabled or query fails after retries
  */
-async function query(text, params) {
+async function query(text, params, retries = 1) {
   if (!databaseEnabled) {
     throw new Error('Database is disabled in single-tenant mode. Database queries are not available.');
   }
 
   const start = Date.now();
-  try {
-    const result = await pool.query(text, params);
-    const duration = Date.now() - start;
-    logger.debug('Database query executed', {
-      duration,
-      rows: result.rowCount,
-    });
-    return result;
-  } catch (error) {
-    const duration = Date.now() - start;
-    logger.error('Database query failed', {
-      duration,
-      error: error.message,
-      query: text.substring(0, 100),
-    });
-    throw error;
+  const maxRetries = retries;
+  let lastError;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await pool.query(text, params);
+      const duration = Date.now() - start;
+
+      if (attempt > 0) {
+        logger.info('Database query succeeded after retry', {
+          duration,
+          rows: result.rowCount,
+          attempt,
+        });
+      } else {
+        logger.debug('Database query executed', {
+          duration,
+          rows: result.rowCount,
+        });
+      }
+
+      return result;
+    } catch (error) {
+      lastError = error;
+
+      // Check if this is a connection-related error that we should retry
+      const isConnectionError =
+        error.message?.includes('Connection terminated') ||
+        error.message?.includes('ECONNRESET') ||
+        error.message?.includes('ECONNREFUSED') ||
+        error.code === '57P01' ||  // admin_shutdown
+        error.code === '57P02' ||  // crash_shutdown
+        error.code === '57P03';    // cannot_connect_now
+
+      if (isConnectionError && attempt < maxRetries) {
+        const duration = Date.now() - start;
+        logger.warn('Database connection error, retrying', {
+          duration,
+          error: error.message,
+          code: error.code,
+          attempt: attempt + 1,
+          maxRetries,
+        });
+        // Exponential backoff delay
+        await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+        continue;
+      }
+
+      // Not a connection error, or out of retries
+      const duration = Date.now() - start;
+      logger.error('Database query failed', {
+        duration,
+        error: error.message,
+        code: error.code,
+        query: text.substring(0, 100),
+        attempts: attempt + 1,
+      });
+      throw error;
+    }
   }
+
+  throw lastError;
 }
 
 /**

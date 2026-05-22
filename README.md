@@ -48,14 +48,14 @@ Opaflix is a web application for replaying Okta Privileged Access (OPA) session 
 
 ### ❓ Why Opaflix?
 
-One of the most common requests we receive from OPA customers is for a simple way to review session recordings. Opaflix was born out of this need — a user-friendly web application that makes it easy to browse and replay your OPA session recordings.
+OPA session recording provides the audit foundation. Opaflix adds a lightweight companion interface for teams that want to browse, search, and replay exported recordings from a centralized S3 archive.
 
-It's highly inspired by an old project of our former colleaugue [Daniel Harris](https://github.com/mrdanielmh/): [opa-utils](https://github.com/mrdanielmh/opa-utils). Since the project is not maintained anymore, I decided to create a new one with a more modern tech stack, and - to be transparent - the heavy help of the AI (Vibe coding with Claude Code).
+It's highly inspired by an old project of our former colleague [Daniel Harris](https://github.com/mrdanielmh/): [opa-utils](https://github.com/mrdanielmh/opa-utils). Since the project is not maintained anymore, I decided to create a new one with a more modern tech stack, and - to be transparent - the heavy help of the AI (Vibe coding with Claude Code).
 
 Opaflix is built with *Node.js*, *Express*, and *Handlebars* for the backend, and uses *[Asciinema Player](https://asciinema.org/)* for SSH session playback and HTML5 video for RDP sessions. It also integrates with the *[OPA API](https://developer.okta.com/docs/api/openapi/opa)* to provide real-time data for the infrastructure graph.
 
 > [!CAUTION]
-> **Not an Official Okta Product** - Opaflix is an open-source project developed by the community. It is not officially supported by Okta. Use at your own risk and always test in a non-production environment first.
+> **Not an Official Okta Product** - Opaflix is an independent community project and is not an official Okta product. Use at your own risk and always test in a non-production environment first.
 
 ### 🚀 Key Features
 
@@ -112,13 +112,13 @@ https://github.com/user-attachments/assets/364eecf2-c99e-42d2-b84a-0de262042b97
 
 ### ⚠️ Limitations
 
-- **No permission management** - All authenticated users have access to all the recordings. I can evaluate a permisson management for the long term roadmap, but at the moment I prefer to keep it simple, as the main audience for Opaflix is represented by PAM Admins and Auditors
-- **S3 Only** - Other storage stack may be evaluated in future, based on the feedbacks
-- **Powered by Vibe Coding** - Even if the code was revised and tested, I'm not a developer and Opaflx was written with the heavy usage of Vibe Coding (powered by Claude Code), so I can't exclude bugs and security issues. Use with caution and always test in a non-production environment first.
+- **Opaflix v1 access model** - Opaflix currently applies one flat recording access scope. Use it for trusted PAM administrators and auditors, and rely on deployment isolation, Okta app assignment, and network controls until granular in-app authorization is added.
+- **S3 only** - Opaflix currently focuses on S3-backed exported recordings. Other storage backends may be evaluated in the future based on feedback.
+- **Powered by Vibe Coding** - Even if the code was revised and tested, I'm not a developer and Opaflix was written with the heavy usage of Vibe Coding (powered by Claude Code), so I can't exclude bugs and security issues. This is a community-built tool and has not undergone formal product security review. Use with caution and always test in a non-production environment first.
 
 ### 🔄 How It Works (High-Level Data Flow)
 
-The following is an high-level overview of the Opaflix data flow:
+The following is a high-level overview of the Opaflix data flow:
 
 ```mermaid
 ---
@@ -175,7 +175,7 @@ flowchart LR
 | Step | Actor | Description |
 | ----- | ----- | ----------- |
 | **1** | Administrator | Connects to target server via SSH or RDP using OPA Gateway as passthrough / bastion host |
-| **2** | OPA Gateway | Proxies the connection to the target server and records the session in proprietary `.asa` format |
+| **2** | OPA Gateway | Proxies the connection to the target server and records the session in native `.asa` format |
 | **3** | Target Server | The actual server being accessed (recorded by the gateway) |
 | **4** | opaflix-sync | Converts `.asa` → `.cast` (SSH) or `.mkv` (RDP), uploads to S3 |
 | **5** | AWS S3 | Stores converted session recordings |

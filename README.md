@@ -55,7 +55,11 @@ It's highly inspired by an old project of our former colleague [Daniel Harris](h
 Opaflix is built with *Node.js*, *Express*, and *Handlebars* for the backend, and uses *[Asciinema Player](https://asciinema.org/)* for SSH session playback and HTML5 video for RDP sessions. It also integrates with the *[OPA API](https://developer.okta.com/docs/api/openapi/opa)* to provide real-time data for the infrastructure graph.
 
 > [!CAUTION]
-> **Not an Official Okta Product** - Opaflix is an independent community project and is not an official Okta product. Use at your own risk and always test in a non-production environment first.
+> **Not an Official Okta Product** - Opaflix is an independent community project.
+>
+> While I am an employee of Okta, Inc. this project was developed by me entirely in my private capacity.  Opaflix is not an official Okta product and is not endorsed, supported or maintained by Okta.
+>
+> Use at your own risk and always test in a non-production environment first.
 
 ### 🚀 Key Features
 
@@ -887,8 +891,10 @@ Opaflix stores session indices in JSONB format for fast search and pagination. T
 
 ---
 
-**Last Updated**: 2026-04-02
+**Last Updated**: 2026-07-15
 
 <p align="center">
   Made with ❤️ for the Okta community
 </p>
+
+* While I am an employee of Okta, Inc. this project was developed by me entirely in my private capacity.  Opaflix is not an official Okta product and is not endorsed, supported or maintained by Okta.*

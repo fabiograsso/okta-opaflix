@@ -891,10 +891,10 @@ Opaflix stores session indices in JSONB format for fast search and pagination. T
 
 ---
 
-**Last Updated**: 2026-07-15
+**Last Updated**: 2026-10-06
 
 <p align="center">
   Made with ❤️ for the Okta community
 </p>
 
-* While I am an employee of Okta, Inc. this project was developed by me entirely in my private capacity.  Opaflix is not an official Okta product and is not endorsed, supported or maintained by Okta.*
+*While I am an employee of Okta, Inc. this project was developed by me entirely in my private capacity.  Opaflix is not an official Okta product and is not endorsed, supported or maintained by Okta.*

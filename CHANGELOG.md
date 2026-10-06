@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-06
+
 ### Added
 - Dark/light theme switcher with auto (OS), light, and dark modes
 - Theme toggle button in top header bar (before help icon)
@@ -19,7 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Migrated hardcoded hex colors across all CSS files to semantic CSS variables
-- Bumped version to 0.3.0 for cache busting
+- Bumped version to 0.3.1 for cache busting
+
+### Security
+- Fixed 9 npm audit/Dependabot vulnerabilities by updating dependencies: `joi` (prototype pollution, ReDoS), `proxy-addr` (critical IP spoofing via IPv4-mapped IPv6), `qs` (array-limit bypass, DoS), `brace-expansion` (multiple DoS issues), `@humanfs/node` (symlink traversal in dev dependency), and `uuid`/`@okta/oidc-middleware` (missing buffer bounds check, upgraded `@okta/oidc-middleware` 5.5.1 → 6.0.2 which replaces `uuid` with native `crypto.randomUUID`)
 
 ---
 

@@ -631,6 +631,17 @@ npm run build:graph -- --watch
 3. Update README.md if it's a major dependency
 4. Verify Docker build still works: `docker build -t opaflix .`
 
+> [!IMPORTANT]
+> Always install npm packages from the public registry (`registry.npmjs.org`), never from internal/proprietary registries (e.g. Artifactory, JFrog, or scoped internal mirrors). If a local or global `.npmrc` points `registry` or a scoped registry at an internal host, override it explicitly for this project, e.g.:
+> ```bash
+> npm install package-name --registry=https://registry.npmjs.org/ --@okta:registry=https://registry.npmjs.org/
+> ```
+> Verify `package-lock.json` only contains `"resolved"` URLs under `registry.npmjs.org` before committing:
+> ```bash
+> grep '"resolved"' package-lock.json | grep -v "registry.npmjs.org"
+> ```
+> This should return no output.
+
 ### Converting OPA Session Recordings
 
 Opaflix includes scripts to convert OPA session recordings from `.asa` format to playable formats using the `sft` CLI tool.
@@ -894,7 +905,7 @@ To emphatize important information in the README, use formatting such as:
 
 ---
 
-**Last Updated**: 2026-04-01
+**Last Updated**: 2026-10-06
 
 This document should be kept up-to-date as the project evolves. When making significant architectural changes, update this file accordingly.
 

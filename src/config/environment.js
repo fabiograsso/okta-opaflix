@@ -13,6 +13,18 @@ const MULTITENANT_VALUES = ['YES', 'yes', '1', 'TRUE', 'true'];
 // Values that indicate single-tenant mode (for Joi.valid())
 const SINGLE_TENANT_VALUES = ['NO', 'no', '0', 'FALSE', 'false', ''];
 
+function normalizeDatabaseEnvironment(env) {
+  const prefix = env.VERCEL_NEON_PREFIX || 'OPAFLIX';
+
+  return {
+    ...env,
+    PGHOST: env.PGHOST || env[`${prefix}_PGHOST`],
+    PGDATABASE: env.PGDATABASE || env[`${prefix}_PGDATABASE`],
+    PGUSER: env.PGUSER || env[`${prefix}_PGUSER`],
+    PGPASSWORD: env.PGPASSWORD || env[`${prefix}_PGPASSWORD`],
+  };
+}
+
 const envSchema = Joi.object({
   // Mode selection
   MULTITENANT: Joi.string()
@@ -118,7 +130,7 @@ const envSchema = Joi.object({
 }).unknown(true);
 
 function validateEnvironment() {
-  const { error, value } = envSchema.validate(process.env, {
+  const { error, value } = envSchema.validate(normalizeDatabaseEnvironment(process.env), {
     abortEarly: false,
     stripUnknown: false,
   });

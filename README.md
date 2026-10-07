@@ -299,6 +299,9 @@ Get Opaflix running in 5 minutes using **single-tenant mode** (no database requi
 
 You can deploy Opaflix to Vercel in single-tenant mode with one click. This setup uses S3 Access Key, but you can also use IAM Roles Anywhere for AWS authentication (see [AWS.md](docs/AWS.md)). You can also switch in [multi-tenant mode](#-multi-tenant-mode), but it requires a PostgreSQL database (such as Neon).
 
+For a Vercel deployment using a **Neon** integration, connect the Neon instance to your Vercel project, set `OPAFLIX` as **Custom Environment Variable Prefix
+**, and then use its default `OPAFLIX_PGHOST`, `OPAFLIX_PGUSER`, `OPAFLIX_PGDATABASE`, and `OPAFLIX_PGPASSWORD` environment variables when the corresponding `PG*` variables are not set. The standard `PGHOST`, `PGUSER`, `PGDATABASE`, and `PGPASSWORD` variables take precedence. Set `VERCEL_NEON_PREFIX` when the integration uses a different prefix; it defaults to `OPAFLIX`.
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffabiograsso%2Fokta-opaflix&env=MULTITENANT,OKTA_ISSUER,OKTA_CLIENT_ID,OKTA_CLIENT_SECRET,AWS_REGION,AWS_S3_BUCKET,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,BASE_URI,SESSION_SECRET,OPA_API_TEAM_NAME,OPA_API_KEY_ID,OPA_API_KEY_SECRET&envDescription=Required%20configuration%20for%20Opaflix%20single-tenant%20deployment&envLink=https%3A%2F%2Fgithub.com%2Ffabiograsso%2Fokta-opaflix%2Fblob%2Fmain%2FREADME.md%23-configuration&project-name=opaflix&repository-name=okta-opaflix)
 
 > [!WARNING]

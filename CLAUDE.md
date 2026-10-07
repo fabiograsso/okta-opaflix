@@ -320,11 +320,16 @@ All environment variables must be:
 - `OPA_API_KEY_SECRET` - OPA API key secret (optional)
 
 **Multi-Tenant Database Configuration** (Required when `MULTITENANT=YES`):
+- `VERCEL_NEON_PREFIX` - Prefix for Vercel Neon PostgreSQL variables (default: `OPAFLIX`)
 - `PGHOST` - PostgreSQL hostname
+- `<prefix>_PGHOST` - Fallback PostgreSQL hostname when `PGHOST` is not set
 - `PGPORT` - PostgreSQL port (default: 5432)
 - `PGDATABASE` - PostgreSQL database name
+- `<prefix>_PGDATABASE` - Fallback database name when `PGDATABASE` is not set
 - `PGUSER` - PostgreSQL user
+- `<prefix>_PGUSER` - Fallback PostgreSQL user when `PGUSER` is not set
 - `PGPASSWORD` - PostgreSQL password
+- `<prefix>_PGPASSWORD` - Fallback PostgreSQL password when `PGPASSWORD` is not set
 - `PGSSLMODE` - SSL mode for connections (default: require)
 
 **Multi-Tenant Cache Configuration** (Optional):

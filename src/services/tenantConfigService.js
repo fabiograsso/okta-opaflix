@@ -303,7 +303,7 @@ async function listActiveTeams(tenantUrl) {
 
 /**
  * Update tenant configuration
- * Only allows updates to aws.* and opaApi.* keys (not okta.*)
+ * Only allows updates to aws.*, opaApi.*, and opaflix.* keys (not okta.*)
  * @param {string} tenantId - Tenant UUID
  * @param {Object} updates - Key-value pairs to update (dot notation keys)
  * @returns {Promise<Object>} Updated config
@@ -313,8 +313,8 @@ async function updateTenantConfig(tenantId, updates) {
     throw new Error('Configuration updates are not available in single-tenant mode. Update environment variables and restart the application.');
   }
 
-  // Validate: only allow aws.* and opaApi.* keys
-  const allowedPrefixes = ['aws.', 'opaApi.'];
+  // Validate: only allow aws.*, opaApi.*, and opaflix.* keys
+  const allowedPrefixes = ['aws.', 'opaApi.', 'opaflix.'];
   const forbiddenPrefixes = ['okta.'];
 
   for (const key of Object.keys(updates)) {
@@ -325,7 +325,7 @@ async function updateTenantConfig(tenantId, updates) {
 
     // Check if key is allowed
     if (!allowedPrefixes.some(prefix => key.startsWith(prefix))) {
-      throw new Error(`Invalid config key: ${key}. Only aws.* and opaApi.* keys are allowed.`);
+      throw new Error(`Invalid config key: ${key}. Only aws.*, opaApi.*, and opaflix.* keys are allowed.`);
     }
   }
 
@@ -380,8 +380,8 @@ async function deleteTenantConfigKeys(tenantId, keys) {
     return 0;
   }
 
-  // Validate: only allow aws.* and opaApi.* keys
-  const allowedPrefixes = ['aws.', 'opaApi.'];
+  // Validate: only allow aws.*, opaApi.*, and opaflix.* keys
+  const allowedPrefixes = ['aws.', 'opaApi.', 'opaflix.'];
   const forbiddenPrefixes = ['okta.'];
 
   for (const key of keys) {
@@ -389,7 +389,7 @@ async function deleteTenantConfigKeys(tenantId, keys) {
       throw new Error(`Cannot delete Okta configuration: ${key}`);
     }
     if (!allowedPrefixes.some(prefix => key.startsWith(prefix))) {
-      throw new Error(`Invalid config key: ${key}. Only aws.* and opaApi.* keys are allowed.`);
+      throw new Error(`Invalid config key: ${key}. Only aws.*, opaApi.*, and opaflix.* keys are allowed.`);
     }
   }
 

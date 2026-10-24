@@ -183,9 +183,9 @@ async function updateConfig(req, res, next) {
     if (req.body['aws.secretAccessKey']) {
       updates['aws.secretAccessKey'] = req.body['aws.secretAccessKey'];
     }
-    if (req.body['aws.region']) {
-      updates['aws.region'] = req.body['aws.region'];
-    }
+    // Default to us-east-1 when region is left blank (e.g. first-time setup)
+    // instead of leaving it unset, which fails required-field validation on save.
+    updates['aws.region'] = req.body['aws.region'] || 'us-east-1';
     if (req.body['aws.bucket']) {
       updates['aws.bucket'] = req.body['aws.bucket'];
     }

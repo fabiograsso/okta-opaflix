@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-10-24
+
+### Fixed
+- Advanced Settings on the Configuration page (`opaflix.sessionIndexRefreshMinutes`, `opaflix.defaultPageSize`) failed to save with "Invalid config key" error — `tenantConfigService.updateTenantConfig()` and `deleteTenantConfigKeys()` only allowlisted `aws.*` and `opaApi.*` prefixes, not `opaflix.*`
+- Saving configuration with an empty AWS Region field failed with a generic error — region is a required field for validation, so an empty submission now defaults to `us-east-1` instead of being silently dropped
+
 ## [0.3.1] - 2026-10-06
 
 ### Added
